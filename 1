@@ -1,0 +1,90 @@
+#include <iostream>
+#include <cstdlib> 
+#include <ctime>
+
+
+
+int getRandomNumber(int min, int max)
+{
+	static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
+	// Равномерно распределяем рандомное число в нашем диапазоне
+	return static_cast<int>(rand() * fraction * (max - min + 1) + min);
+}
+
+
+bool Again()
+{
+
+	char ch;
+	do
+	{
+		std::cout << "Хочешь сыграть ещё разок?(y/n):  ";
+		std::cin >> ch;
+
+
+	} while (ch != 'y' && ch != 'n');
+
+	return(ch == 'y');
+}
+
+
+
+
+bool Play( int number)
+{
+	int min = 1;
+	int max = 100;
+	while(true)
+	{
+		int otvet = getRandomNumber(min,max);
+		std::cout << "Твоё число это "<< otvet<<"\n";
+		if (otvet > number && otvet < max)
+		{
+			std::cout << "Нет? Ну, тогда возьмём число поменьше \n";
+			max = otvet;
+		}
+		else if (otvet < number && otvet > min)
+		{
+			std::cout << "Нет? Ну, тогда возьмём число побольше \n";
+			min = otvet;
+		}
+		else if (otvet == min || otvet == max)
+		{
+			std::cout << "";
+		}
+		else if (otvet == number)
+		{
+			return true;
+			break;
+		}
+
+	}
+	return false;
+}
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	srand(static_cast<unsigned int>(time(0))); // в качестве стартового числа используем системные часы
+	rand();
+
+
+	do
+	{
+		int number;
+		std::cout << "Ты вводишь число, а я угадываю, игра проста, погнали!\nЯ закрыл глаза, можешь вводить число:";
+		std::cin >> number;
+
+		bool won = Play( number);
+		if (won)
+			std::cout << "ХА-ХА-ХА, это было легко! \n";
+		else
+			std::cout << "Довольно грустное событие((";
+
+
+	} while (Again());
+
+	std::cout << "Было довольно весело, приходи ещё! \n";
+	return 0;
+
+}
